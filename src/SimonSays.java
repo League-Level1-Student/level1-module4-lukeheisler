@@ -1,3 +1,4 @@
+
 /*
  *    Copyright (c) The League of Amazing Programmers 2013-2018
  *    Level 1
@@ -31,9 +32,12 @@ public class SimonSays extends KeyAdapter {
 	int points;
 
 	private void makeAlbum() {
-		// 2. Add the four images that match keyboard keys like this: 
-		//images.put(new Integer(KeyEvent.VK_UP), "up.jpg");
+		// 2. Add the four images that match keyboard keys like this:
+		// images.put(new Integer(KeyEvent.VK_UP), "up.jpg");
 		images.put(new Integer(KeyEvent.VK_UP), "up.jpg");
+		images.put(new Integer(KeyEvent.VK_DOWN), "down.jpg");
+		images.put(new Integer(KeyEvent.VK_LEFT), "left.jpg");
+		images.put(new Integer(KeyEvent.VK_RIGHT), "right.jpg");
 		// 3. Use a JOptionPane to tell the user the rules: "Press the matching key when
 		// 'Simon says' otherwise press a different key"
 		JOptionPane.showMessageDialog(null, "Welcome to Simon Says.");
@@ -43,32 +47,41 @@ public class SimonSays extends KeyAdapter {
 
 	public void keyPressed(KeyEvent e) {
 		// 15. Make a points variable to track the score.
-		
+
 		// 16. If the keyCode matches the imageIndex and "Simon says"
-		if(keyCode==imageIndex) {
-			
+		if (e.getKeyCode() == imageIndex && simonSays == true) {
+			points++;
+			speak("Correct!");
 		}
-			// 17. Increase the value of score
-		
-			// 18. Use the speak method to tell the user they were correct
-		
+		// 17. Increase the value of score
+
+		// 18. Use the speak method to tell the user they were correct
+
 		// 19. If the keyCode doesn't match the imageIndex and "Simon didn't say..."
-		
-			// 20.  Increase the value of score
-		
-			// 21. Use the speak method to tell the user they were correct
-		
+		else if (e.getKeyCode() != imageIndex && simonSays == false) {
+			points++;
+			speak("Correct!");
+		}
+		// 20. Increase the value of score
+
+		// 21. Use the speak method to tell the user they were correct
+
 		// 22. Increment tries by 1
-		
+		tries++;
 		// 25. If tries is greater than 9 (or however many you want)...
-		
-			// 26. Tell the user their score
-		
-			// 27. Exit the program
+		if (tries > 9) {
+			JOptionPane.showMessageDialog(null, "Your score was " + points + "!");
+			System.exit(0);
+
+		}
+		// 26. Tell the user their score
+
+		// 27. Exit the program
 
 		// 23. Dispose of the frame
-
+		frame.dispose();
 		// 24. Call the showImage method to show a new image
+		showImage();
 	}
 
 	private void showImage() {
@@ -88,21 +101,19 @@ public class SimonSays extends KeyAdapter {
 		frame.addKeyListener(this);
 		// 12. Create a new instance of Random
 		Random random = new Random();
-		// 13. Use the Random and the speak method to either say 
+		// 13. Use the Random and the speak method to either say
 		// "Simon says press this key" or "Press this key"
-		int randomNo = random.nextInt(1);
-		if(randomNo==0) {
+		int randomNo = random.nextInt(2);
+		if (randomNo == 0) {
 			speak("Simon says press this key");
 			simonSays = true;
-			
-		}
-		else {
+
+		} else {
 			speak("Press this key");
 			simonSays = false;
 		}
 		// 14. Above, set the value of simonSays to true/false appropriately
 
-		
 	}
 
 	private Component getNextRandomImage() {
@@ -120,7 +131,8 @@ public class SimonSays extends KeyAdapter {
 		try {
 			Runtime.getRuntime().exec("say " + words).waitFor();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println(words);
 		}
 	}
 
@@ -130,13 +142,10 @@ public class SimonSays extends KeyAdapter {
 }
 
 /*
- * BONUS!
- * Add a timer :
- * ~~~ where the code starts running ~~~ 
- * timeAtStart = newDate();
+ * BONUS! Add a timer : ~~~ where the code starts running ~~~ timeAtStart =
+ * newDate();
  *
- * ~~~ where the code ends ~~~ 
- * Date timeAtEnd = new Date();
+ * ~~~ where the code ends ~~~ Date timeAtEnd = new Date();
  * System.out.println((timeAtEnd.getTime()-timeAtStart.getTime())/1000);
  * System.exit(0);
  */
