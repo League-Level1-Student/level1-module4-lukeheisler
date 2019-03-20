@@ -26,7 +26,7 @@ public class Calculator implements Runnable, MouseListener {
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Calculator());
-	}
+	} 
 	
 	public int add(String s1, String s2) {
 		int arg1 = Integer.parseInt(s1);
