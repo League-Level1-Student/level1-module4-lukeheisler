@@ -1,9 +1,11 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Date;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -11,7 +13,9 @@ public class WhackAMole implements Runnable, MouseListener {
 
 	JFrame frame = new JFrame();
 	JPanel panel = new JPanel();
-	JButton button;
+	Date date;
+	int score = 0;
+	//JButton button;
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new WhackAMole());
@@ -19,6 +23,7 @@ public class WhackAMole implements Runnable, MouseListener {
 
 	@Override
 	public void run() {
+		date = new Date();
 		frame.add(panel);
 		frame.setVisible(true);
 		frame.setSize(200,300);
@@ -29,7 +34,7 @@ public class WhackAMole implements Runnable, MouseListener {
 		Random random = new Random();
 		int mole = random.nextInt(24);
 		for (int i = 0; i < 24; i++) {
-			button = new JButton();
+			JButton button = new JButton();
 			button.addMouseListener(this);
 			panel.add(button);
 			if(i==mole) {
@@ -42,9 +47,20 @@ public class WhackAMole implements Runnable, MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		if(arg0.g) {
-			
+	public void mouseClicked(MouseEvent e) {
+		JButton b = (JButton)e.getSource();
+		if(b.getText().equals("^_^")) {
+			panel.removeAll();
+			makeButtons();
+			score++;
+			System.out.println(score);
+		}
+		else {
+			speak("That's not it :(");
+		}
+		
+		if(score==10) {
+			endGame(date, score);
 		}
 	}
 
@@ -71,5 +87,22 @@ public class WhackAMole implements Runnable, MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	void speak(String words) {
+		/*
+	     try {
+	          Runtime.getRuntime().exec("say " + words).waitFor();
+	     } catch (Exception e) {
+	          e.printStackTrace();
+	     }
+	     */
+		System.out.println(words);
+	}
 
+	private void endGame(Date timeAtStart, int molesWhacked) {
+	     Date timeAtEnd = new Date();
+	     JOptionPane.showMessageDialog(null, "Your whack rate is "
+	          + ((timeAtEnd.getTime() - timeAtStart.getTime()) / 1000.00 / molesWhacked)
+	          + " seconds per mole.");
+	}
 }
